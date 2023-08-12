@@ -7,6 +7,7 @@ import androidx.viewpager2.adapter.FragmentStateAdapter
 import com.android.vanguard.databinding.ActivityMainBinding
 import com.google.android.material.tabs.TabLayoutMediator
 
+
 class MainActivity : FragmentActivity() {
 
     private lateinit var binding: ActivityMainBinding
@@ -27,6 +28,8 @@ class MainActivity : FragmentActivity() {
         // 뷰페이저 연결
         // 뷰바인딩 처리 해줘야할듯
         binding.viewPager.adapter = adapter
+        binding.viewPager.setPageTransformer(PageTransformer2())
+
 
         // 탭레이아웃과 뷰페이저 연결
         TabLayoutMediator(binding.tabLayout, binding.viewPager) { tab, position ->
