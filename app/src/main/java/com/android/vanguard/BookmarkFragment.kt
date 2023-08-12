@@ -27,7 +27,7 @@ class BookmarkFragment : Fragment() {
     fun loadData() : List<Bookmark>{
         val list = mutableListOf<Bookmark>()
         for(i in 1 .. 100){
-            val bookmark = Bookmark("bookmark")
+            val bookmark = Bookmark("bookmark ${i}")
             list.add(bookmark)
         }
      return list

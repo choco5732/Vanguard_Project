@@ -15,6 +15,7 @@ class MainActivity : FragmentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
+        // 뷰바인딩 설정
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
@@ -22,16 +23,13 @@ class MainActivity : FragmentActivity() {
         val adapter = FragmentAdapter(this)
         val fragments = listOf<Fragment>(TodoFragment(), BookmarkFragment())
         adapter.fragments.addAll(fragments)
-
-         val tabTitles =  listOf<String>("todo", "bookmark")
-
         // 뷰페이저 연결
-        // 뷰바인딩 처리 해줘야할듯
         binding.viewPager.adapter = adapter
         binding.viewPager.setPageTransformer(PageTransformer2())
 
 
-        // 탭레이아웃과 뷰페이저 연결
+        // 탭레이아웃 설정
+         val tabTitles =  listOf<String>("todo", "bookmark")
         TabLayoutMediator(binding.tabLayout, binding.viewPager) { tab, position ->
             tab.text = tabTitles[position]
         }.attach()
@@ -39,8 +37,7 @@ class MainActivity : FragmentActivity() {
     }
 }
 
-// 뷰페지어 어댑터
-
+// 뷰페이저 어댑터
 class FragmentAdapter(fragmentActivity: FragmentActivity) : FragmentStateAdapter(fragmentActivity){
     val fragments = mutableListOf<Fragment>()
     // 뷰의 갯수

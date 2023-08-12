@@ -30,7 +30,6 @@ class BookmarkAdapter(val list : List<Bookmark>) : RecyclerView.Adapter<Holder2>
 }
 
 class Holder2(private val binding: FragmentBookmarkItemBinding) : RecyclerView.ViewHolder(binding.root){
-
     fun setItem(bookmark : Bookmark){
         binding.textView.text = "${bookmark.text}"
     }
