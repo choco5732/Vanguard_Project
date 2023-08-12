@@ -6,4 +6,9 @@
 
     <string name="main_tab_bookmark_title">Bookmark</string>
 
+    <string name="todo_add_title">할일</string>
+    <string name="todo_add_content_title_hint">제목</string>
+    <string name="todo_add_content_description_hint">내용</string>
+    <string name="todo_add_submit">등록</string>
+
 </resources>

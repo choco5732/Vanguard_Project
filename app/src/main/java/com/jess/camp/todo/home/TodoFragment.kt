@@ -1,4 +1,4 @@
-package com.jess.camp.todo
+package com.jess.camp.todo.home
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -20,6 +20,8 @@ class TodoFragment : Fragment() {
         TodoListAdapter()
     }
 
+    private val todoList = ArrayList<TodoModel>()
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -32,23 +34,15 @@ class TodoFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         initView()
-
-        // for test
-        val testList = arrayListOf<TodoModel>()
-        for (i in 0 until 100) {
-            testList.add(
-                TodoModel(
-                    id = i,
-                    "Todo Title $i"
-                )
-            )
-        }
-
-        listAdapter.submitList(testList)
     }
 
     private fun initView() = with(binding) {
         todoList.adapter = listAdapter
+    }
+
+    fun setDodoContent(title: String?, description: String?) {
+        todoList.add(TodoModel(title, description))
+        listAdapter.submitList(todoList)
     }
 
     override fun onDestroyView() {

@@ -1,4 +1,4 @@
-package com.jess.camp.todo
+package com.jess.camp.todo.home
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
@@ -17,7 +17,7 @@ class TodoListAdapter : ListAdapter<TodoModel, TodoListAdapter.ViewHolder>(diffU
             }
 
             override fun areItemsTheSame(oldItem: TodoModel, newItem: TodoModel): Boolean {
-                return oldItem.id == newItem.id
+                return oldItem.title == newItem.title
             }
         }
     }
@@ -38,6 +38,7 @@ class TodoListAdapter : ListAdapter<TodoModel, TodoListAdapter.ViewHolder>(diffU
 
         fun bind(item: TodoModel) = with(binding) {
             title.text = item.title
+            description.text = item.description
         }
     }
 
