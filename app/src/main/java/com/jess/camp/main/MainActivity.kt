@@ -26,8 +26,8 @@ class MainActivity : AppCompatActivity() {
                 val description =
                     result.data?.getStringExtra(TodoAddActivity.EXTRA_TODO_DESCRIPTION)
 
-                val todoFragment = viewPagerAdapter.getTodoFragment()
-                todoFragment?.setDodoContent(title, description)
+                val todoFragment = viewPagerAdapter.getFragment(0) as TodoFragment
+                todoFragment.setDodoContent(title, description)
             }
         }
 

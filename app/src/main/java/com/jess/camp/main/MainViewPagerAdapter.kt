@@ -11,21 +11,23 @@ class MainViewPagerAdapter(
     fragmentActivity: FragmentActivity
 ) : FragmentStateAdapter(fragmentActivity) {
 
-    private val fragments = listOf(
-        TodoFragment.newInstance() to R.string.main_tab_todo_title,
-        BookmarkFragment.newInstance() to R.string.main_tab_bookmark_title,
-    )
+    private val fragments = ArrayList<MainTabs>()
 
-    fun getFragment(position: Int): Fragment {
-        return fragments[position].first
+    init {
+        fragments.add(
+            MainTabs(TodoFragment.newInstance(), R.string.main_tab_bookmark_title)
+        )
+        fragments.add(
+            MainTabs(BookmarkFragment.newInstance(), R.string.main_tab_todo_title),
+        )
     }
 
-    fun getTodoFragment(): TodoFragment? {
-        return fragments[0].first as? TodoFragment
+    fun getFragment(position: Int): Fragment {
+        return fragments[position].fragment
     }
 
     fun getTitle(position: Int): Int {
-        return fragments[position].second
+        return fragments[position].titleRes
     }
 
     override fun getItemCount(): Int {
@@ -33,6 +35,6 @@ class MainViewPagerAdapter(
     }
 
     override fun createFragment(position: Int): Fragment {
-        return fragments[position].first
+        return fragments[position].fragment
     }
 }
