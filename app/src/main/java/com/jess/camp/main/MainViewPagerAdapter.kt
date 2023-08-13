@@ -15,10 +15,10 @@ class MainViewPagerAdapter(
 
     init {
         fragments.add(
-            MainTabs(TodoFragment.newInstance(), R.string.main_tab_bookmark_title)
+            MainTabs(TodoFragment.newInstance(), R.string.main_tab_todo_title)
         )
         fragments.add(
-            MainTabs(BookmarkFragment.newInstance(), R.string.main_tab_todo_title),
+            MainTabs(BookmarkFragment.newInstance(), R.string.main_tab_bookmark_title),
         )
     }
 

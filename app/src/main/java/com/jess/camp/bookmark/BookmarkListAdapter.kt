@@ -2,24 +2,20 @@ package com.jess.camp.bookmark
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
-import androidx.recyclerview.widget.DiffUtil
-import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.jess.camp.databinding.BookmarkItemBinding
 
-class BookmarkListAdapter : ListAdapter<BookmarkModel, BookmarkListAdapter.ViewHolder>(diffUtil) {
+class BookmarkListAdapter : RecyclerView.Adapter<BookmarkListAdapter.ViewHolder>() {
 
-    companion object {
-        private val diffUtil = object : DiffUtil.ItemCallback<BookmarkModel>() {
+    private val list = ArrayList<BookmarkModel>()
 
-            override fun areContentsTheSame(oldItem: BookmarkModel, newItem: BookmarkModel): Boolean {
-                return oldItem == newItem
-            }
+    fun addItems(items: List<BookmarkModel>) {
+        list.addAll(items)
+        notifyDataSetChanged()
+    }
 
-            override fun areItemsTheSame(oldItem: BookmarkModel, newItem: BookmarkModel): Boolean {
-                return oldItem.id == newItem.id
-            }
-        }
+    override fun getItemCount(): Int {
+        return list.size
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
@@ -28,8 +24,10 @@ class BookmarkListAdapter : ListAdapter<BookmarkModel, BookmarkListAdapter.ViewH
         )
     }
 
+
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        holder.bind(getItem(position))
+        val item = list[position]
+        holder.bind(item)
     }
 
     class ViewHolder(

@@ -42,7 +42,7 @@ class TodoFragment : Fragment() {
 
     fun setDodoContent(title: String?, description: String?) {
         todoList.add(TodoModel(title, description))
-        listAdapter.submitList(todoList)
+        listAdapter.addItems(todoList)
     }
 
     override fun onDestroyView() {

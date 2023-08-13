@@ -29,6 +29,11 @@ class TodoAddActivity : AppCompatActivity() {
     }
 
     private fun initView() = with(binding) {
+
+        toolBar.setNavigationOnClickListener {
+            finish()
+        }
+
         submit.setOnClickListener {
             val intent = Intent().apply {
                 putExtra(EXTRA_TODO_TITLE, todoTitle.text.toString())
