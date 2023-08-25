@@ -20,10 +20,9 @@ class BookmarkListAdapter : RecyclerView.Adapter<BookmarkListAdapter.ViewHolder>
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         return ViewHolder(
-            BookmarkItemBinding.inflate(LayoutInflater.from(parent.context))
+            BookmarkItemBinding.inflate(LayoutInflater.from(parent.context), parent, false)
         )
     }
-
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val item = list[position]

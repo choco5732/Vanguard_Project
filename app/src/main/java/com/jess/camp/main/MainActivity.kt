@@ -1,6 +1,7 @@
 package com.jess.camp.main
 
 import android.app.Activity
+import android.os.Build
 import android.os.Bundle
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
@@ -8,8 +9,9 @@ import androidx.viewpager2.widget.ViewPager2
 import com.google.android.material.tabs.TabLayoutMediator
 import com.jess.camp.R
 import com.jess.camp.databinding.MainActivityBinding
-import com.jess.camp.todo.add.TodoAddActivity
+import com.jess.camp.todo.content.TodoContentActivity
 import com.jess.camp.todo.home.TodoFragment
+import com.jess.camp.todo.home.TodoModel
 
 class MainActivity : AppCompatActivity() {
 
@@ -19,15 +21,22 @@ class MainActivity : AppCompatActivity() {
         MainViewPagerAdapter(this@MainActivity)
     }
 
-    private val addToDoLauncher =
+    private val addTodoLauncher =
         registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
             if (result.resultCode == Activity.RESULT_OK) {
-                val title = result.data?.getStringExtra(TodoAddActivity.EXTRA_TODO_TITLE)
-                val description =
-                    result.data?.getStringExtra(TodoAddActivity.EXTRA_TODO_DESCRIPTION)
+                val todoModel = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+                    result.data?.getParcelableExtra(
+                        TodoContentActivity.EXTRA_TODO_MODEL,
+                        TodoModel::class.java
+                    )
+                } else {
+                    result.data?.getParcelableExtra(
+                        TodoContentActivity.EXTRA_TODO_MODEL
+                    )
+                }
 
                 val todoFragment = viewPagerAdapter.getFragment(0) as TodoFragment
-                todoFragment.setDodoContent(title, description)
+                todoFragment.setDodoContent(todoModel)
             }
         }
 
@@ -62,8 +71,8 @@ class MainActivity : AppCompatActivity() {
 
         // fab
         fabAddTodo.setOnClickListener {
-            addToDoLauncher.launch(
-                TodoAddActivity.newIntent(this@MainActivity)
+            addTodoLauncher.launch(
+                TodoContentActivity.newIntentForAdd(this@MainActivity)
             )
         }
 

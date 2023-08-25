@@ -1,11 +1,15 @@
 package com.jess.camp.todo.home
 
+import android.app.Activity
+import android.os.Build
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.fragment.app.Fragment
 import com.jess.camp.databinding.TodoFragmentBinding
+import com.jess.camp.todo.content.TodoContentActivity
 
 class TodoFragment : Fragment() {
 
@@ -16,11 +20,36 @@ class TodoFragment : Fragment() {
     private var _binding: TodoFragmentBinding? = null
     private val binding get() = _binding!!
 
-    private val listAdapter by lazy {
-        TodoListAdapter()
-    }
+    private val editTodoLauncher =
+        registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+            if (result.resultCode == Activity.RESULT_OK) {
+                val position = result.data?.getIntExtra(TodoContentActivity.EXTRA_TODO_POSITION, -1)
+                val todoModel = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+                    result.data?.getParcelableExtra(
+                        TodoContentActivity.EXTRA_TODO_MODEL,
+                        TodoModel::class.java
+                    )
+                } else {
+                    result.data?.getParcelableExtra(
+                        TodoContentActivity.EXTRA_TODO_MODEL
+                    )
+                }
 
-    private val todoList = ArrayList<TodoModel>()
+                modifyTodoItem(position, todoModel)
+            }
+        }
+
+    private val listAdapter by lazy {
+        TodoListAdapter { position, item ->
+            editTodoLauncher.launch(
+                TodoContentActivity.newIntentForEdit(
+                    requireContext(),
+                    position,
+                    item
+                )
+            )
+        }
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -40,10 +69,20 @@ class TodoFragment : Fragment() {
         todoList.adapter = listAdapter
     }
 
-    fun setDodoContent(title: String?, description: String?) {
-        todoList.add(TodoModel(title, description))
-        listAdapter.addItems(todoList)
+    fun setDodoContent(todoModel: TodoModel?) {
+        listAdapter.addItem(todoModel)
     }
+
+    private fun modifyTodoItem(
+        position: Int?,
+        todoModel: TodoModel?
+    ) {
+        listAdapter.modifyItem(
+            position,
+            todoModel
+        )
+    }
+
 
     override fun onDestroyView() {
         _binding = null

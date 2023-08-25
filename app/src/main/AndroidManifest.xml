@@ -23,7 +23,7 @@
         </activity>
 
         <activity
-            android:name=".todo.add.TodoAddActivity"
+            android:name=".todo.content.TodoContentActivity"
             android:windowSoftInputMode="adjustResize" />
     </application>
 

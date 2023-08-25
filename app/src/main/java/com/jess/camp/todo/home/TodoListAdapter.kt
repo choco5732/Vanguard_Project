@@ -5,13 +5,33 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.jess.camp.databinding.TodoItemBinding
 
-class TodoListAdapter : RecyclerView.Adapter<TodoListAdapter.ViewHolder>() {
+class TodoListAdapter(
+    private val onClickItem: (Int, TodoModel) -> Unit
+) : RecyclerView.Adapter<TodoListAdapter.ViewHolder>() {
 
     private val list = ArrayList<TodoModel>()
+
+    fun addItem(todoModel: TodoModel?) {
+        todoModel?.let {
+            list.add(todoModel)
+            notifyDataSetChanged()
+        }
+    }
 
     fun addItems(items: List<TodoModel>) {
         list.addAll(items)
         notifyDataSetChanged()
+    }
+
+    fun modifyItem(
+        position: Int?,
+        todoModel: TodoModel?
+    ) {
+        if (position == null || todoModel == null) {
+            return
+        }
+        list[position] = todoModel
+        notifyItemChanged(position)
     }
 
     override fun getItemCount(): Int {
@@ -20,7 +40,8 @@ class TodoListAdapter : RecyclerView.Adapter<TodoListAdapter.ViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         return ViewHolder(
-            TodoItemBinding.inflate(LayoutInflater.from(parent.context))
+            TodoItemBinding.inflate(LayoutInflater.from(parent.context), parent, false),
+            onClickItem
         )
     }
 
@@ -30,12 +51,20 @@ class TodoListAdapter : RecyclerView.Adapter<TodoListAdapter.ViewHolder>() {
     }
 
     class ViewHolder(
-        private val binding: TodoItemBinding
+        private val binding: TodoItemBinding,
+        private val onClickItem: (Int, TodoModel) -> Unit
     ) : RecyclerView.ViewHolder(binding.root) {
 
         fun bind(item: TodoModel) = with(binding) {
             title.text = item.title
             description.text = item.description
+
+            container.setOnClickListener {
+                onClickItem(
+                    adapterPosition,
+                    item
+                )
+            }
         }
     }
 
