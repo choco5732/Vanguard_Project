@@ -9,9 +9,13 @@ class TodoListAdapter : RecyclerView.Adapter<TodoListAdapter.ViewHolder>() {
 
     private val list = ArrayList<TodoModel>()
 
-    fun addItems(items: List<TodoModel>) {
-        list.addAll(items)
-        notifyDataSetChanged()
+    fun addItem(todoModel: TodoModel?) {
+        if (todoModel == null) {
+            return
+        }
+
+        list.add(todoModel)
+        notifyItemChanged(list.size - 1)
     }
 
     override fun getItemCount(): Int {
