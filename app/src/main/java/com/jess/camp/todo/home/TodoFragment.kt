@@ -20,8 +20,6 @@ class TodoFragment : Fragment() {
         TodoListAdapter()
     }
 
-    private val todoList = ArrayList<TodoModel>()
-
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -40,9 +38,8 @@ class TodoFragment : Fragment() {
         todoList.adapter = listAdapter
     }
 
-    fun setDodoContent(title: String?, description: String?) {
-        todoList.add(TodoModel(title, description))
-        listAdapter.addItems(todoList)
+    fun setDodoContent(todoModel: TodoModel?) {
+        listAdapter.addItem(todoModel)
     }
 
     override fun onDestroyView() {

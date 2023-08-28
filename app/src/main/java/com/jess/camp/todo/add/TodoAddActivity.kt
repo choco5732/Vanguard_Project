@@ -6,14 +6,13 @@ import android.content.Intent
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import com.jess.camp.databinding.TodoAddActivityBinding
+import com.jess.camp.todo.home.TodoModel
 
 
 class TodoAddActivity : AppCompatActivity() {
 
     companion object {
-
-        const val EXTRA_TODO_TITLE = "extra_todo_title"
-        const val EXTRA_TODO_DESCRIPTION = "extra_todo_description"
+        const val EXTRA_MODEL = "extra_model"
 
         fun newIntent(context: Context) = Intent(context, TodoAddActivity::class.java)
     }
@@ -36,8 +35,12 @@ class TodoAddActivity : AppCompatActivity() {
 
         submit.setOnClickListener {
             val intent = Intent().apply {
-                putExtra(EXTRA_TODO_TITLE, todoTitle.text.toString())
-                putExtra(EXTRA_TODO_DESCRIPTION, todoDescription.text.toString())
+                putExtra(
+                    EXTRA_MODEL, TodoModel(
+                        todoTitle.text.toString(),
+                        todoDescription.text.toString()
+                    )
+                )
             }
             setResult(Activity.RESULT_OK, intent)
             finish()

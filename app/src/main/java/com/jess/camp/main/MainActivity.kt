@@ -1,6 +1,7 @@
 package com.jess.camp.main
 
 import android.app.Activity
+import android.os.Build
 import android.os.Bundle
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
@@ -10,6 +11,7 @@ import com.jess.camp.R
 import com.jess.camp.databinding.MainActivityBinding
 import com.jess.camp.todo.add.TodoAddActivity
 import com.jess.camp.todo.home.TodoFragment
+import com.jess.camp.todo.home.TodoModel
 
 class MainActivity : AppCompatActivity() {
 
@@ -22,12 +24,19 @@ class MainActivity : AppCompatActivity() {
     private val addToDoLauncher =
         registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
             if (result.resultCode == Activity.RESULT_OK) {
-                val title = result.data?.getStringExtra(TodoAddActivity.EXTRA_TODO_TITLE)
-                val description =
-                    result.data?.getStringExtra(TodoAddActivity.EXTRA_TODO_DESCRIPTION)
+                val todoModel = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+                    result.data?.getParcelableExtra(
+                        TodoAddActivity.EXTRA_MODEL,
+                        TodoModel::class.java
+                    )
+                } else {
+                    result.data?.getParcelableExtra(
+                        TodoAddActivity.EXTRA_MODEL
+                    )
+                }
 
-                val todoFragment = viewPagerAdapter.getFragment(0) as TodoFragment
-                todoFragment.setDodoContent(title, description)
+                val todoFragment = viewPagerAdapter.getFragment(0) as? TodoFragment
+                todoFragment?.setDodoContent(todoModel)
             }
         }
 
