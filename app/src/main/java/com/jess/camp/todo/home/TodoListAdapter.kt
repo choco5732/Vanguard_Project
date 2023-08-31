@@ -14,7 +14,7 @@ class TodoListAdapter(
     fun addItem(todoModel: TodoModel?) {
         todoModel?.let {
             list.add(todoModel)
-            notifyDataSetChanged()
+            notifyItemChanged(list.size - 1)
         }
     }
 
@@ -32,6 +32,16 @@ class TodoListAdapter(
         }
         list[position] = todoModel
         notifyItemChanged(position)
+    }
+
+    fun removeItem(
+        position: Int?
+    ) {
+        if (position == null) {
+            return
+        }
+        list.removeAt(position)
+        notifyItemRemoved(position)
     }
 
     override fun getItemCount(): Int {

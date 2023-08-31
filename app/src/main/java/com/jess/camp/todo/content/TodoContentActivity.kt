@@ -5,7 +5,9 @@ import android.content.Context
 import android.content.Intent
 import android.os.Build
 import android.os.Bundle
+import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.view.isVisible
 import com.jess.camp.R
 import com.jess.camp.databinding.TodoAddActivityBinding
 import com.jess.camp.todo.home.TodoModel
@@ -15,14 +17,14 @@ class TodoContentActivity : AppCompatActivity() {
 
     companion object {
 
-        private const val EXTRA_TODO_TYPE = "extra_todo_type"
+        const val EXTRA_TODO_ENTRY_TYPE = "extra_todo_entry_type"
         const val EXTRA_TODO_POSITION = "extra_todo_position"
         const val EXTRA_TODO_MODEL = "extra_todo_model"
 
         fun newIntentForAdd(
             context: Context
         ) = Intent(context, TodoContentActivity::class.java).apply {
-            putExtra(EXTRA_TODO_TYPE, TodoContentType.ADD.name)
+            putExtra(EXTRA_TODO_ENTRY_TYPE, TodoContentType.ADD.name)
         }
 
         fun newIntentForEdit(
@@ -30,7 +32,7 @@ class TodoContentActivity : AppCompatActivity() {
             position: Int,
             todoModel: TodoModel
         ) = Intent(context, TodoContentActivity::class.java).apply {
-            putExtra(EXTRA_TODO_TYPE, TodoContentType.EDIT.name)
+            putExtra(EXTRA_TODO_ENTRY_TYPE, TodoContentType.EDIT.name)
             putExtra(EXTRA_TODO_POSITION, position)
             putExtra(EXTRA_TODO_MODEL, todoModel)
         }
@@ -39,7 +41,7 @@ class TodoContentActivity : AppCompatActivity() {
     private lateinit var binding: TodoAddActivityBinding
 
     private val type by lazy {
-        intent.getStringExtra(EXTRA_TODO_TYPE)
+        intent.getStringExtra(EXTRA_TODO_ENTRY_TYPE)
     }
 
     private val todoModel by lazy {
@@ -53,6 +55,14 @@ class TodoContentActivity : AppCompatActivity() {
                 EXTRA_TODO_MODEL
             )
         }
+    }
+
+    private val entryType by lazy {
+        intent.getIntExtra(EXTRA_TODO_POSITION, -1)
+    }
+
+    private val position by lazy {
+        intent.getIntExtra(EXTRA_TODO_POSITION, -1)
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -72,8 +82,12 @@ class TodoContentActivity : AppCompatActivity() {
         submit.setOnClickListener {
             val intent = Intent().apply {
                 putExtra(
+                    EXTRA_TODO_ENTRY_TYPE,
+                    entryType
+                )
+                putExtra(
                     EXTRA_TODO_POSITION,
-                    intent.getIntExtra(EXTRA_TODO_POSITION, -1)
+                    position
                 )
                 putExtra(
                     EXTRA_TODO_MODEL,
@@ -85,6 +99,34 @@ class TodoContentActivity : AppCompatActivity() {
             }
             setResult(Activity.RESULT_OK, intent)
             finish()
+
+        }
+
+        delete.setOnClickListener {
+            AlertDialog.Builder(this@TodoContentActivity).apply {
+                setMessage(R.string.todo_add_delete_dialog_message)
+                setPositiveButton(
+                    R.string.todo_add_delete_dialog_positive
+                ) { _, _ ->
+                    val intent = Intent().apply {
+                        putExtra(
+                            EXTRA_TODO_ENTRY_TYPE,
+                            TodoContentType.DELETE.name
+                        )
+                        putExtra(
+                            EXTRA_TODO_POSITION,
+                            position
+                        )
+                    }
+                    setResult(Activity.RESULT_OK, intent)
+                    finish()
+                }
+                setNegativeButton(
+                    R.string.todo_add_delete_dialog_negative
+                ) { _, _ ->
+                    // nothing
+                }
+            }.create().show()
         }
 
         // 버튼 이름 변경
@@ -95,6 +137,9 @@ class TodoContentActivity : AppCompatActivity() {
                 R.string.todo_add_submit
             }
         )
+
+        // 추가 버튼이 아닐 경우 삭제 버튼 노출
+        delete.isVisible = type != TodoContentType.ADD.name
     }
 
     private fun initData() = with(binding) {
