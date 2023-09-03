@@ -33,7 +33,7 @@ class TodoAddActivity : AppCompatActivity() {
             finish()
         }
 
-        submit.setOnClickListener {
+        registerBtn.setOnClickListener {
             val intent = Intent().apply {
                 putExtra(
                     EXTRA_MODEL, TodoModel(

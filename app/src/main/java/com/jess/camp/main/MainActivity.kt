@@ -1,8 +1,10 @@
 package com.jess.camp.main
 
 import android.app.Activity
+import android.content.Intent
 import android.os.Build
 import android.os.Bundle
+import android.view.View
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import androidx.viewpager2.widget.ViewPager2
@@ -10,7 +12,9 @@ import com.google.android.material.tabs.TabLayoutMediator
 import com.jess.camp.R
 import com.jess.camp.databinding.MainActivityBinding
 import com.jess.camp.todo.add.TodoAddActivity
+import com.jess.camp.todo.edit.TodoEditActivity
 import com.jess.camp.todo.home.TodoFragment
+import com.jess.camp.todo.home.TodoListAdapter
 import com.jess.camp.todo.home.TodoModel
 
 class MainActivity : AppCompatActivity() {
@@ -36,7 +40,7 @@ class MainActivity : AppCompatActivity() {
                 }
 
                 val todoFragment = viewPagerAdapter.getFragment(0) as? TodoFragment
-                todoFragment?.setDodoContent(todoModel)
+                todoFragment?.setTodoContent(todoModel)
             }
         }
 
@@ -75,7 +79,5 @@ class MainActivity : AppCompatActivity() {
                 TodoAddActivity.newIntent(this@MainActivity)
             )
         }
-
-
     }
 }
