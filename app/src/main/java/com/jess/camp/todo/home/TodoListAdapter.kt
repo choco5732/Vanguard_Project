@@ -25,19 +25,25 @@ class TodoListAdapter(
     }
 
     fun modifyItem(
-        position: Int?,
-        todoModel: TodoModel?
+        item: TodoModel?,
+        position: Int? = null
     ) {
-        if (position == null || todoModel == null) {
+        item ?: return
+
+        // position 이 null 이면 indexOf 실시
+        val findPosition = position ?: findIndex(item)
+        if (findPosition < 0) {
             return
         }
-        list[position] = todoModel
-        notifyItemChanged(position)
+
+        list[findPosition] = item
+        notifyItemChanged(findPosition)
     }
 
-    fun modifyItem2(position: Int, checked: Boolean) {
-
+    private fun findIndex(item: TodoModel?): Int {
+        return list.indexOf(list.find { it.title == item?.title })
     }
+
 
     fun removeItem(
         position: Int?

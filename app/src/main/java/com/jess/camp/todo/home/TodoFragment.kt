@@ -41,7 +41,7 @@ class TodoFragment : Fragment() {
 
                 // entry type 에 따라 기능 분리
                 when (entryType) {
-                    TodoContentType.EDIT.name -> modifyTodoItem(position, todoModel)
+                    TodoContentType.EDIT.name -> modifyTodoItem(todoModel, position)
                     TodoContentType.REMOVE.name -> removeItemTodoItem(position)
                 }
             }
@@ -59,7 +59,10 @@ class TodoFragment : Fragment() {
                 )
             },
             onBookmarkChecked = { position, item ->
-                modifyTodoItem(position, item)
+                modifyTodoItem(
+                    position = position,
+                    item = item
+                )
                 addItemToBookmarkTab(item)
             }
         )
@@ -101,13 +104,13 @@ class TodoFragment : Fragment() {
     /**
      * 아이템을 수정합니다.
      */
-    private fun modifyTodoItem(
-        position: Int?,
-        todoModel: TodoModel?
+    fun modifyTodoItem(
+        item: TodoModel?,
+        position: Int? = null
     ) {
         listAdapter.modifyItem(
-            position,
-            todoModel
+            item,
+            position
         )
     }
 

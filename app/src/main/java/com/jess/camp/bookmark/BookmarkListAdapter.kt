@@ -23,6 +23,13 @@ class BookmarkListAdapter(
         notifyDataSetChanged()
     }
 
+    fun removeItem(
+        position: Int
+    ) {
+        list.removeAt(position)
+        notifyItemRemoved(position)
+    }
+
     override fun getItemCount(): Int {
         return list.size
     }
