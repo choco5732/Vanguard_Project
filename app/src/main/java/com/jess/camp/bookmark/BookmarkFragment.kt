@@ -17,7 +17,9 @@ class BookmarkFragment : Fragment() {
     private val binding get() = _binding!!
 
     private val listAdapter by lazy {
-        BookmarkListAdapter()
+        BookmarkListAdapter { position, item ->
+
+        }
     }
 
     override fun onCreateView(
@@ -32,23 +34,16 @@ class BookmarkFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         initView()
-
-        // for testww
-        val testList = arrayListOf<BookmarkModel>()
-        for (i in 0 until 100) {
-            testList.add(
-                BookmarkModel(
-                    id = i,
-                    "Bookmark Title $i"
-                )
-            )
-        }
-
-        listAdapter.addItems(testList)
     }
 
     private fun initView() = with(binding) {
         bookmarkList.adapter = listAdapter
+    }
+
+    fun addItem(
+        item: BookmarkModel
+    ) {
+        listAdapter.addItem(item)
     }
 
     override fun onDestroyView() {

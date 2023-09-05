@@ -9,6 +9,7 @@ import android.view.ViewGroup
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.fragment.app.Fragment
 import com.jess.camp.databinding.TodoFragmentBinding
+import com.jess.camp.main.MainActivity
 import com.jess.camp.todo.content.TodoContentActivity
 import com.jess.camp.todo.content.TodoContentType
 
@@ -47,15 +48,21 @@ class TodoFragment : Fragment() {
         }
 
     private val listAdapter by lazy {
-        TodoListAdapter { position, item ->
-            editTodoLauncher.launch(
-                TodoContentActivity.newIntentForEdit(
-                    requireContext(),
-                    position,
-                    item
+        TodoListAdapter(
+            onClickItem = { position, item ->
+                editTodoLauncher.launch(
+                    TodoContentActivity.newIntentForEdit(
+                        requireContext(),
+                        position,
+                        item
+                    )
                 )
-            )
-        }
+            },
+            onBookmarkChecked = { position, item ->
+                modifyTodoItem(position, item)
+                addItemToBookmarkTab(item)
+            }
+        )
     }
 
     override fun onCreateView(
@@ -74,6 +81,17 @@ class TodoFragment : Fragment() {
 
     private fun initView() = with(binding) {
         todoList.adapter = listAdapter
+
+        listAdapter.addItems(arrayListOf<TodoModel>().apply {
+            for (i in 0 until 10) {
+                add(
+                    TodoModel(
+                        "title $i",
+                        "description $i"
+                    )
+                )
+            }
+        })
     }
 
     fun setDodoContent(todoModel: TodoModel?) {
@@ -98,6 +116,15 @@ class TodoFragment : Fragment() {
      */
     private fun removeItemTodoItem(position: Int?) {
         listAdapter.removeItem(position)
+    }
+
+    /**
+     * Bookmark Tab 에 아이템을 추가합니다.
+     */
+    private fun addItemToBookmarkTab(
+        item: TodoModel
+    ) {
+        (activity as? MainActivity)?.addBookmarkItem(item)
     }
 
     override fun onDestroyView() {

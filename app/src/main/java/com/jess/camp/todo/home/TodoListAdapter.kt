@@ -6,14 +6,15 @@ import androidx.recyclerview.widget.RecyclerView
 import com.jess.camp.databinding.TodoItemBinding
 
 class TodoListAdapter(
-    private val onClickItem: (Int, TodoModel) -> Unit
+    private val onClickItem: (Int, TodoModel) -> Unit,
+    private val onBookmarkChecked: (Int, TodoModel) -> Unit
 ) : RecyclerView.Adapter<TodoListAdapter.ViewHolder>() {
 
     private val list = ArrayList<TodoModel>()
 
-    fun addItem(todoModel: TodoModel?) {
-        todoModel?.let {
-            list.add(todoModel)
+    fun addItem(item: TodoModel?) {
+        item?.let {
+            list.add(item)
             notifyItemChanged(list.size - 1)
         }
     }
@@ -34,6 +35,10 @@ class TodoListAdapter(
         notifyItemChanged(position)
     }
 
+    fun modifyItem2(position: Int, checked: Boolean) {
+
+    }
+
     fun removeItem(
         position: Int?
     ) {
@@ -51,7 +56,8 @@ class TodoListAdapter(
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         return ViewHolder(
             TodoItemBinding.inflate(LayoutInflater.from(parent.context), parent, false),
-            onClickItem
+            onClickItem,
+            onBookmarkChecked
         )
     }
 
@@ -62,18 +68,34 @@ class TodoListAdapter(
 
     class ViewHolder(
         private val binding: TodoItemBinding,
-        private val onClickItem: (Int, TodoModel) -> Unit
+        private val onClickItem: (Int, TodoModel) -> Unit,
+        private val onBookmarkChecked: (Int, TodoModel) -> Unit
     ) : RecyclerView.ViewHolder(binding.root) {
 
         fun bind(item: TodoModel) = with(binding) {
             title.text = item.title
             description.text = item.description
+            bookmark.isChecked = item.isBookmark
 
+            // 아이템 클릭
             container.setOnClickListener {
                 onClickItem(
                     adapterPosition,
                     item
                 )
+            }
+
+            // 북마크 클릭
+            bookmark.setOnCheckedChangeListener { _, isChecked ->
+                // 현재 바인딩된 아이템과 checked 된 값 비교 후 전달
+                if (item.isBookmark != isChecked) {
+                    onBookmarkChecked(
+                        adapterPosition,
+                        item.copy(
+                            isBookmark = isChecked
+                        )
+                    )
+                }
             }
         }
     }
