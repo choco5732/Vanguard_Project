@@ -28,7 +28,7 @@ class TodoFragment : Fragment() {
                 val entryType =
                     result.data?.getStringExtra(TodoContentActivity.EXTRA_TODO_ENTRY_TYPE)
                 val position = result.data?.getIntExtra(TodoContentActivity.EXTRA_TODO_POSITION, -1)
-                val todoModel = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+                val item = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
                     result.data?.getParcelableExtra(
                         TodoContentActivity.EXTRA_TODO_MODEL,
                         TodoModel::class.java
@@ -40,9 +40,10 @@ class TodoFragment : Fragment() {
                 }
 
                 // entry type 에 따라 기능 분리
-                when (entryType) {
-                    TodoContentType.EDIT.name -> modifyTodoItem(todoModel, position)
-                    TodoContentType.REMOVE.name -> removeItemTodoItem(position)
+                when (TodoContentType.from(entryType)) {
+                    TodoContentType.EDIT -> modifyTodoItem(item, position)
+                    TodoContentType.REMOVE -> removeItemTodoItem(position)
+                    else -> Unit // nothing
                 }
             }
         }

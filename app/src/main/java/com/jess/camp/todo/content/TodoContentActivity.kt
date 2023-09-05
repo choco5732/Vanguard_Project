@@ -40,8 +40,8 @@ class TodoContentActivity : AppCompatActivity() {
 
     private lateinit var binding: TodoAddActivityBinding
 
-    private val type by lazy {
-        intent.getStringExtra(EXTRA_TODO_ENTRY_TYPE)
+    private val entryType by lazy {
+        TodoContentType.from(intent.getStringExtra(EXTRA_TODO_ENTRY_TYPE))
     }
 
     private val todoModel by lazy {
@@ -55,10 +55,6 @@ class TodoContentActivity : AppCompatActivity() {
                 EXTRA_TODO_MODEL
             )
         }
-    }
-
-    private val entryType by lazy {
-        intent.getIntExtra(EXTRA_TODO_POSITION, -1)
     }
 
     private val position by lazy {
@@ -83,7 +79,7 @@ class TodoContentActivity : AppCompatActivity() {
             val intent = Intent().apply {
                 putExtra(
                     EXTRA_TODO_ENTRY_TYPE,
-                    entryType
+                    entryType?.name
                 )
                 putExtra(
                     EXTRA_TODO_POSITION,
@@ -131,19 +127,18 @@ class TodoContentActivity : AppCompatActivity() {
 
         // 버튼 이름 변경
         submit.setText(
-            if (type == TodoContentType.EDIT.name) {
-                R.string.todo_add_edit
-            } else {
-                R.string.todo_add_submit
+            when (entryType) {
+                TodoContentType.EDIT -> R.string.todo_add_edit
+                else -> R.string.todo_add_submit
             }
         )
 
         // 추가 버튼이 아닐 경우 삭제 버튼 노출
-        delete.isVisible = type != TodoContentType.ADD.name
+        delete.isVisible = entryType != TodoContentType.ADD
     }
 
     private fun initData() = with(binding) {
-        if (type == TodoContentType.EDIT.name) {
+        if (entryType == TodoContentType.EDIT) {
             todoTitle.setText(todoModel?.title)
             todoDescription.setText(todoModel?.description)
         }
