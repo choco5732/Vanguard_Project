@@ -111,7 +111,7 @@ class TodoContentActivity : AppCompatActivity() {
                     val intent = Intent().apply {
                         putExtra(
                             EXTRA_TODO_ENTRY_TYPE,
-                            TodoContentType.DELETE.name
+                            TodoContentType.REMOVE.name
                         )
                         putExtra(
                             EXTRA_TODO_POSITION,
