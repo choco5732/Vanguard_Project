@@ -39,9 +39,10 @@ class TodoFragment : Fragment() {
                 }
 
                 // entry type 에 따라 기능 분리
-                when (entryType) {
-                    TodoContentType.EDIT.name -> modifyTodoItem(position, todoModel)
-                    TodoContentType.REMOVE.name -> removeItemTodoItem(position)
+                when (TodoContentType.from(entryType)) {
+                    TodoContentType.EDIT -> modifyTodoItem(position, todoModel)
+                    TodoContentType.REMOVE -> removeItemTodoItem(position)
+                    else -> Unit // nothing
                 }
             }
         }
