@@ -39,14 +39,29 @@ class TodoListAdapter(
         submitList(list)
     }
 
-    fun modifyItem(item: TodoModel?, position: Int?) {
-        if (item == null || position == null) {
+    fun modifyItem(
+        item: TodoModel?,
+        position: Int?
+    ) {
+        item ?: return
+
+        // position 이 null 이면 indexOf 실시
+        val findPosition = position ?: findIndex(item)
+        if (findPosition < 0) {
             return
         }
 
         val list = currentList.toMutableList()
-        list[position] = item
+        list[findPosition] = item
         submitList(list)
+    }
+
+    private fun findIndex(item: TodoModel?): Int {
+        return currentList.indexOf(
+            currentList.find {
+                it.title == item?.title
+            }
+        )
     }
 
     fun removeItem(position: Int?) {
