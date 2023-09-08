@@ -2,36 +2,48 @@ package com.jess.camp.bookmark
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.recyclerview.widget.DiffUtil
+import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.jess.camp.databinding.BookmarkItemBinding
 
 class BookmarkListAdapter(
     private val onBookmarkChecked: (Int, BookmarkModel) -> Unit
-) : RecyclerView.Adapter<BookmarkListAdapter.ViewHolder>() {
+) : ListAdapter<BookmarkModel, BookmarkListAdapter.ViewHolder>(
 
-    private val list = ArrayList<BookmarkModel>()
+    object : DiffUtil.ItemCallback<BookmarkModel>() {
+        override fun areItemsTheSame(
+            oldItem: BookmarkModel,
+            newItem: BookmarkModel
+        ): Boolean {
+            return oldItem.id == newItem.id
+        }
 
-    fun addItem(item: BookmarkModel?) {
-        item?.let {
-            list.add(item)
-            notifyItemChanged(list.size - 1)
+        override fun areContentsTheSame(
+            oldItem: BookmarkModel,
+            newItem: BookmarkModel
+        ): Boolean {
+            return oldItem == newItem
         }
     }
+) {
 
-    fun addItems(items: List<BookmarkModel>) {
-        list.addAll(items)
-        notifyDataSetChanged()
+    fun addItem(item: BookmarkModel?) {
+        if (item == null) {
+            return
+        }
+
+        val list = currentList.toMutableList()
+        list.add(item)
+        submitList(list)
     }
 
     fun removeItem(
         position: Int
     ) {
+        val list = currentList.toMutableList()
         list.removeAt(position)
-        notifyItemRemoved(position)
-    }
-
-    override fun getItemCount(): Int {
-        return list.size
+        submitList(list)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
@@ -42,7 +54,7 @@ class BookmarkListAdapter(
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        val item = list[position]
+        val item = getItem(position)
         holder.bind(item)
     }
 

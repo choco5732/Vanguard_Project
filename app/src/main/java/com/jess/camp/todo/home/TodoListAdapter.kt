@@ -2,61 +2,61 @@ package com.jess.camp.todo.home
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.recyclerview.widget.DiffUtil
+import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.jess.camp.databinding.TodoItemBinding
 
 class TodoListAdapter(
     private val onClickItem: (Int, TodoModel) -> Unit,
     private val onBookmarkChecked: (Int, TodoModel) -> Unit
-) : RecyclerView.Adapter<TodoListAdapter.ViewHolder>() {
+) : ListAdapter<TodoModel, TodoListAdapter.ViewHolder>(
 
-    private val list = ArrayList<TodoModel>()
+    object : DiffUtil.ItemCallback<TodoModel>() {
+        override fun areItemsTheSame(
+            oldItem: TodoModel,
+            newItem: TodoModel
+        ): Boolean {
+            return oldItem.id == newItem.id
+        }
 
-    fun addItem(item: TodoModel?) {
-        item?.let {
-            list.add(item)
-            notifyItemChanged(list.size - 1)
+        override fun areContentsTheSame(
+            oldItem: TodoModel,
+            newItem: TodoModel
+        ): Boolean {
+            return oldItem == newItem
         }
     }
+) {
 
-    fun addItems(items: List<TodoModel>) {
-        list.addAll(items)
-        notifyDataSetChanged()
-    }
-
-    fun modifyItem(
-        item: TodoModel?,
-        position: Int? = null
-    ) {
-        item ?: return
-
-        // position 이 null 이면 indexOf 실시
-        val findPosition = position ?: findIndex(item)
-        if (findPosition < 0) {
+    fun addItem(item: TodoModel?) {
+        if (item == null) {
             return
         }
 
-        list[findPosition] = item
-        notifyItemChanged(findPosition)
+        val list = currentList.toMutableList()
+        list.add(item)
+        submitList(list)
     }
 
-    private fun findIndex(item: TodoModel?): Int {
-        return list.indexOf(list.find { it.title == item?.title })
+    fun modifyItem(item: TodoModel?, position: Int?) {
+        if (item == null || position == null) {
+            return
+        }
+
+        val list = currentList.toMutableList()
+        list[position] = item
+        submitList(list)
     }
 
-
-    fun removeItem(
-        position: Int?
-    ) {
+    fun removeItem(position: Int?) {
         if (position == null) {
             return
         }
-        list.removeAt(position)
-        notifyItemRemoved(position)
-    }
 
-    override fun getItemCount(): Int {
-        return list.size
+        val list = currentList.toMutableList()
+        list.removeAt(position)
+        submitList(list)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
@@ -68,7 +68,7 @@ class TodoListAdapter(
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        val item = list[position]
+        val item = getItem(position)
         holder.bind(item)
     }
 

@@ -12,6 +12,7 @@ import com.jess.camp.databinding.TodoFragmentBinding
 import com.jess.camp.main.MainActivity
 import com.jess.camp.todo.content.TodoContentActivity
 import com.jess.camp.todo.content.TodoContentType
+import java.util.concurrent.atomic.AtomicLong
 
 class TodoFragment : Fragment() {
 
@@ -69,6 +70,8 @@ class TodoFragment : Fragment() {
         )
     }
 
+    private val idGenerate = AtomicLong(1L)
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -86,16 +89,18 @@ class TodoFragment : Fragment() {
     private fun initView() = with(binding) {
         todoList.adapter = listAdapter
 
-        listAdapter.addItems(arrayListOf<TodoModel>().apply {
+        val list = arrayListOf<TodoModel>().apply {
             for (i in 0 until 10) {
                 add(
                     TodoModel(
+                        idGenerate.getAndIncrement(),
                         "title $i",
                         "description $i"
                     )
                 )
             }
-        })
+        }
+        listAdapter.submitList(list)
     }
 
     fun setDodoContent(todoModel: TodoModel?) {

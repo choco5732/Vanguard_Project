@@ -7,7 +7,6 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import com.jess.camp.databinding.BookmarkFragmentBinding
 import com.jess.camp.main.MainActivity
-import java.text.FieldPosition
 
 class BookmarkFragment : Fragment() {
 
@@ -23,12 +22,6 @@ class BookmarkFragment : Fragment() {
             modifyItemAtTodoTab(item)
             removeItem(position)
         }
-    }
-
-    private fun removeItem(
-        position: Int
-    ) {
-        listAdapter.removeItem(position)
     }
 
     override fun onCreateView(
@@ -53,6 +46,12 @@ class BookmarkFragment : Fragment() {
         item: BookmarkModel
     ) {
         listAdapter.addItem(item)
+    }
+
+    private fun removeItem(
+        position: Int
+    ) {
+        listAdapter.removeItem(position)
     }
 
     private fun modifyItemAtTodoTab(
