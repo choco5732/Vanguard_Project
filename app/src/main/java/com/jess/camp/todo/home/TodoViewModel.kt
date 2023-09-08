@@ -79,7 +79,7 @@ class TodoViewModel : ViewModel() {
     }
 
     fun removeTodoItem(position: Int?) {
-        if (position == null) {
+        if (position == null || position < 0) {
             return
         }
 

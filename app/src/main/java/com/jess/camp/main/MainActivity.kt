@@ -68,6 +68,7 @@ class MainActivity : AppCompatActivity() {
                 }
             }
         })
+        viewPager.offscreenPageLimit = viewPagerAdapter.itemCount
 
         // TabLayout x ViewPager2
         TabLayoutMediator(tabLayout, viewPager) { tab, position ->

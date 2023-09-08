@@ -5,6 +5,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.ViewModelProvider
 import com.jess.camp.databinding.BookmarkFragmentBinding
 import com.jess.camp.main.MainActivity
 
@@ -16,6 +17,10 @@ class BookmarkFragment : Fragment() {
 
     private var _binding: BookmarkFragmentBinding? = null
     private val binding get() = _binding!!
+
+    private val viewModel: BookmarkViewModel by lazy {
+        ViewModelProvider(this)[BookmarkViewModel::class.java]
+    }
 
     private val listAdapter by lazy {
         BookmarkListAdapter { position, item ->
@@ -36,6 +41,13 @@ class BookmarkFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         initView()
+        initViewModel()
+    }
+
+    private fun initViewModel() = with(viewModel) {
+        list.observe(viewLifecycleOwner) {
+            listAdapter.submitList(it)
+        }
     }
 
     private fun initView() = with(binding) {
@@ -45,13 +57,13 @@ class BookmarkFragment : Fragment() {
     fun addItem(
         item: BookmarkModel
     ) {
-        listAdapter.addItem(item)
+        viewModel.addBookmarkItem(item)
     }
 
     private fun removeItem(
         position: Int
     ) {
-        listAdapter.removeItem(position)
+        viewModel.removeBookmarkItem(position)
     }
 
     private fun modifyItemAtTodoTab(

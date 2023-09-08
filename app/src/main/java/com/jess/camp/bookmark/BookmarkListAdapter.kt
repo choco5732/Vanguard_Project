@@ -28,24 +28,6 @@ class BookmarkListAdapter(
     }
 ) {
 
-    fun addItem(item: BookmarkModel?) {
-        if (item == null) {
-            return
-        }
-
-        val list = currentList.toMutableList()
-        list.add(item)
-        submitList(list)
-    }
-
-    fun removeItem(
-        position: Int
-    ) {
-        val list = currentList.toMutableList()
-        list.removeAt(position)
-        submitList(list)
-    }
-
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         return ViewHolder(
             BookmarkItemBinding.inflate(LayoutInflater.from(parent.context), parent, false),
