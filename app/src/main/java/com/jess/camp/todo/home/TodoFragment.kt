@@ -8,11 +8,11 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.ViewModelProvider
 import com.jess.camp.databinding.TodoFragmentBinding
 import com.jess.camp.main.MainActivity
 import com.jess.camp.todo.content.TodoContentActivity
 import com.jess.camp.todo.content.TodoContentType
-import java.util.concurrent.atomic.AtomicLong
 
 class TodoFragment : Fragment() {
 
@@ -22,6 +22,10 @@ class TodoFragment : Fragment() {
 
     private var _binding: TodoFragmentBinding? = null
     private val binding get() = _binding!!
+
+    private val viewModel: TodoViewModel by lazy {
+        ViewModelProvider(this)[TodoViewModel::class.java]
+    }
 
     private val editTodoLauncher =
         registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
@@ -70,8 +74,6 @@ class TodoFragment : Fragment() {
         )
     }
 
-    private val idGenerate = AtomicLong(1L)
-
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -84,27 +86,24 @@ class TodoFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         initView()
+        initViewModel()
     }
 
     private fun initView() = with(binding) {
         todoList.adapter = listAdapter
-
-        val list = arrayListOf<TodoModel>().apply {
-            for (i in 0 until 10) {
-                add(
-                    TodoModel(
-                        idGenerate.getAndIncrement(),
-                        "title $i",
-                        "description $i"
-                    )
-                )
-            }
-        }
-        listAdapter.submitList(list)
     }
 
-    fun setDodoContent(todoModel: TodoModel?) {
-        listAdapter.addItem(todoModel)
+    private fun initViewModel() = with(viewModel) {
+        list.observe(viewLifecycleOwner) {
+            listAdapter.submitList(it)
+        }
+    }
+
+
+    fun setDodoContent(
+        todoModel: TodoModel?
+    ) {
+        viewModel.addTodoItem(todoModel)
     }
 
     /**
@@ -114,17 +113,16 @@ class TodoFragment : Fragment() {
         item: TodoModel?,
         position: Int? = null
     ) {
-        listAdapter.modifyItem(
-            item,
-            position
-        )
+        viewModel.modifyTodoItem(position, item)
     }
 
     /**
      * 아이템을 삭제합니다.
      */
-    private fun removeItemTodoItem(position: Int?) {
-        listAdapter.removeItem(position)
+    private fun removeItemTodoItem(
+        position: Int?
+    ) {
+        viewModel.removeTodoItem(position)
     }
 
     /**
