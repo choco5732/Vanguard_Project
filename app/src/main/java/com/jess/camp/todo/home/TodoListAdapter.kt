@@ -5,7 +5,9 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.jess.camp.databinding.TodoItemBinding
 
-class TodoListAdapter : RecyclerView.Adapter<TodoListAdapter.ViewHolder>() {
+class TodoListAdapter(
+    private val onClickItem: (Int, TodoModel) -> Unit // 현업에서는 인터페이스 보다는 하이어드 펑션을 이용하는 추세!
+) : RecyclerView.Adapter<TodoListAdapter.ViewHolder>() {
 
     private val list = ArrayList<TodoModel>()
 
@@ -18,13 +20,38 @@ class TodoListAdapter : RecyclerView.Adapter<TodoListAdapter.ViewHolder>() {
         notifyItemChanged(list.size - 1)
     }
 
+    fun editTodoItem(
+        position: Int,
+        item: TodoModel?
+    ) {
+        if (position < 0) {
+            return
+        }
+
+        if (item == null) {
+            return
+        }
+
+        list[position]= item
+        notifyItemChanged(position) // 전체가 아닌 해당 위치의 아이템만 변경
+    }
+    fun deleteTodoItem(position: Int) {
+        if (position < 0) {
+            return
+        }
+
+        list.removeAt(position)
+        notifyItemRemoved(position)
+    }
+
     override fun getItemCount(): Int {
         return list.size
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         return ViewHolder(
-            TodoItemBinding.inflate(LayoutInflater.from(parent.context))
+            TodoItemBinding.inflate(LayoutInflater.from(parent.context), parent, false),
+            onClickItem
         )
     }
 
@@ -33,14 +60,23 @@ class TodoListAdapter : RecyclerView.Adapter<TodoListAdapter.ViewHolder>() {
         holder.bind(item)
     }
 
+
+
     class ViewHolder(
-        private val binding: TodoItemBinding
+        private val binding: TodoItemBinding,
+        private val onClickItem: (Int, TodoModel) -> Unit
     ) : RecyclerView.ViewHolder(binding.root) {
 
         fun bind(item: TodoModel) = with(binding) {
             title.text = item.title
             description.text = item.description
+
+            container.setOnClickListener {
+                onClickItem(
+                    adapterPosition,
+                    item
+                )
+            }
         }
     }
-
 }

@@ -9,7 +9,7 @@ import androidx.viewpager2.widget.ViewPager2
 import com.google.android.material.tabs.TabLayoutMediator
 import com.jess.camp.R
 import com.jess.camp.databinding.MainActivityBinding
-import com.jess.camp.todo.add.TodoAddActivity
+import com.jess.camp.todo.content.TodoContentActivity
 import com.jess.camp.todo.home.TodoFragment
 import com.jess.camp.todo.home.TodoModel
 
@@ -26,12 +26,12 @@ class MainActivity : AppCompatActivity() {
             if (result.resultCode == Activity.RESULT_OK) {
                 val todoModel = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
                     result.data?.getParcelableExtra(
-                        TodoAddActivity.EXTRA_MODEL,
+                        TodoContentActivity.EXTRA_MODEL,
                         TodoModel::class.java
                     )
                 } else {
                     result.data?.getParcelableExtra(
-                        TodoAddActivity.EXTRA_MODEL
+                        TodoContentActivity.EXTRA_MODEL
                     )
                 }
 
@@ -72,7 +72,7 @@ class MainActivity : AppCompatActivity() {
         // fab
         fabAddTodo.setOnClickListener {
             addToDoLauncher.launch(
-                TodoAddActivity.newIntent(this@MainActivity)
+                TodoContentActivity.newIntentForAdd(this@MainActivity)
             )
         }
 
