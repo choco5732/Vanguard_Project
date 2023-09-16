@@ -8,6 +8,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.ViewModelProvider
 import com.jess.camp.databinding.TodoFragmentBinding
 import com.jess.camp.todo.content.TodoContentActivity
 import com.jess.camp.todo.content.TodoContentType
@@ -20,6 +21,11 @@ class TodoFragment : Fragment() {
 
     private var _binding: TodoFragmentBinding? = null
     private val binding get() = _binding!!
+
+    // AAC 뷰모델은 아래와 같이 선언해야 한다. (뷰모델 프로바이더)
+    private val viewModel: TodoViewModel by lazy {
+        ViewModelProvider(this).get(TodoViewModel::class.java) // owner는
+    }
 
     private val editTodoLauncher =
         registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
@@ -71,14 +77,26 @@ class TodoFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         initView()
+        initModel()
     }
+
 
     private fun initView() = with(binding) {
         todoList.adapter = listAdapter
     }
+    // ViewModel을 통한 데이터 처리
+    // Owner : Fragment -> viewLifecycleOwner
+    // Owner : Activity -> this
+    // observe : onStart, onResume에서만 살펴본다 즉 화면이 죽은상태에서는 안봄
+    private fun initModel() = with(viewModel) {
+        list.observe(viewLifecycleOwner){
+            listAdapter.submitList(it)
+        }
+    }
 
-    fun setDodoContent(todoModel: TodoModel?) {
-        listAdapter.addItem(todoModel)
+    fun setTodoContent(todoModel: TodoModel?) {
+//        listAdapter.addItem(todoModel)
+        viewModel.addTodoItem(todoModel)
     }
 
     /**
@@ -88,17 +106,19 @@ class TodoFragment : Fragment() {
         position: Int?,
         todoModel: TodoModel?
     ) {
-        listAdapter.modifyItem(
-            position,
-            todoModel
-        )
+//        listAdapter.modifyItem(
+//            position,
+//            todoModel
+//        )
+        viewModel.modifyTodoItem(position, todoModel)
     }
 
     /**
      * 아이템을 삭제합니다.
      */
     private fun removeItemTodoItem(position: Int?) {
-        listAdapter.removeItem(position)
+    //  listAdapter.removeItem(position)
+        viewModel.removeTodoItem(position)
     }
 
     override fun onDestroyView() {

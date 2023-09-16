@@ -88,8 +88,8 @@ class TodoContentActivity : AppCompatActivity() {
                 putExtra(
                     EXTRA_TODO_MODEL,
                     TodoModel(
-                        todoTitle.text.toString(),
-                        todoDescription.text.toString()
+                        title = todoTitle.text.toString(),
+                        description = todoDescription.text.toString()
                     )
                 )
             }
