@@ -85,17 +85,22 @@ class TodoContentActivity : AppCompatActivity() {
                     EXTRA_TODO_POSITION,
                     position
                 )
+
+                val title = todoTitle.text.toString()
+                val description = todoDescription.text.toString()
                 putExtra(
                     EXTRA_TODO_MODEL,
-                    TodoModel(
-                        title = todoTitle.text.toString(),
-                        description = todoDescription.text.toString()
+                    todoModel?.copy(
+                        title = title,
+                        description = description
+                    ) ?: TodoModel(
+                        title = title,
+                        description = description
                     )
                 )
             }
             setResult(Activity.RESULT_OK, intent)
             finish()
-
         }
 
         delete.setOnClickListener {

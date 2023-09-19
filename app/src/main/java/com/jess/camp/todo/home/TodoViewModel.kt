@@ -3,15 +3,15 @@ package com.jess.camp.todo.home
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.ViewModelProvider
 import java.util.concurrent.atomic.AtomicLong
 
-class TodoViewModel : ViewModel() {
+class TodoViewModel(
+    private val idGenerate: AtomicLong
+) : ViewModel() {
 
     private val _list: MutableLiveData<List<TodoModel>> = MutableLiveData()
     val list: LiveData<List<TodoModel>> get() = _list
-
-    // id 를 부여할 값
-    private val idGenerate = AtomicLong(1L)
 
     init {
         _list.value = arrayListOf<TodoModel>().apply {
@@ -31,16 +31,16 @@ class TodoViewModel : ViewModel() {
      * TodoModel 아이템을 추가합니다.
      */
     fun addTodoItem(
-        todoModel: TodoModel?
+        item: TodoModel?
     ) {
-        if (todoModel == null) {
+        if (item == null) {
             return
         }
 
         val currentList = list.value.orEmpty().toMutableList()
         _list.value = currentList.apply {
             add(
-                todoModel.copy(
+                item.copy(
                     id = idGenerate.getAndIncrement()
                 )
             )
@@ -48,8 +48,7 @@ class TodoViewModel : ViewModel() {
     }
 
     fun modifyTodoItem(
-        position: Int?,
-        todoModel: TodoModel?
+        item: TodoModel?
     ) {
 
         fun findIndex(item: TodoModel?): Int {
@@ -63,18 +62,18 @@ class TodoViewModel : ViewModel() {
             return currentList.indexOf(findTodo)
         }
 
-        if (todoModel == null) {
+        if (item == null) {
             return
         }
 
         // position 이 null 이면 indexOf 실시
-        val findPosition = position ?: findIndex(todoModel)
+        val findPosition = findIndex(item)
         if (findPosition < 0) {
             return
         }
 
         val currentList = list.value.orEmpty().toMutableList()
-        currentList[findPosition] = todoModel
+        currentList[findPosition] = item
         _list.value = currentList
     }
 
@@ -86,5 +85,19 @@ class TodoViewModel : ViewModel() {
         val currentList = list.value.orEmpty().toMutableList()
         currentList.removeAt(position)
         _list.value = currentList
+    }
+}
+
+class TodoViewModelFactory : ViewModelProvider.Factory {
+
+    // id 를 부여할 값
+    private val idGenerate = AtomicLong(1L)
+
+    override fun <T : ViewModel> create(modelClass: Class<T>): T {
+        if (modelClass.isAssignableFrom(TodoViewModel::class.java)) {
+            return TodoViewModel(idGenerate) as T
+        } else {
+            throw IllegalArgumentException("Not found ViewModel class.")
+        }
     }
 }

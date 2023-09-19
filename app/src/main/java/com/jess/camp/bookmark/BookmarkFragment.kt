@@ -5,9 +5,11 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.ViewModelProvider
+import androidx.fragment.app.activityViewModels
+import androidx.fragment.app.viewModels
 import com.jess.camp.databinding.BookmarkFragmentBinding
-import com.jess.camp.main.MainActivity
+import com.jess.camp.main.MainSharedEvent
+import com.jess.camp.main.MainSharedViewModel
 
 class BookmarkFragment : Fragment() {
 
@@ -18,14 +20,13 @@ class BookmarkFragment : Fragment() {
     private var _binding: BookmarkFragmentBinding? = null
     private val binding get() = _binding!!
 
-    private val viewModel: BookmarkViewModel by lazy {
-        ViewModelProvider(this)[BookmarkViewModel::class.java]
-    }
+    private val sharedViewModel: MainSharedViewModel by activityViewModels()
+    private val viewModel: BookmarkViewModel by viewModels()
 
     private val listAdapter by lazy {
         BookmarkListAdapter { position, item ->
-            modifyItemAtTodoTab(item)
-            removeItem(position)
+            viewModel.removeBookmarkItem(position)
+            sharedViewModel.updateTodoItem(item)
         }
     }
 
@@ -44,32 +45,28 @@ class BookmarkFragment : Fragment() {
         initViewModel()
     }
 
-    private fun initViewModel() = with(viewModel) {
-        list.observe(viewLifecycleOwner) {
-            listAdapter.submitList(it)
-        }
-    }
-
     private fun initView() = with(binding) {
         bookmarkList.adapter = listAdapter
     }
 
-    fun addItem(
-        item: BookmarkModel
-    ) {
-        viewModel.addBookmarkItem(item)
-    }
+    private fun initViewModel() {
+        with(viewModel) {
+            list.observe(viewLifecycleOwner) {
+                listAdapter.submitList(it)
+            }
+        }
 
-    private fun removeItem(
-        position: Int
-    ) {
-        viewModel.removeBookmarkItem(position)
-    }
+        with(sharedViewModel) {
+            event.observe(viewLifecycleOwner) { event ->
+                when (event) {
+                    is MainSharedEvent.UpdateBookmarkItems -> {
+                        viewModel.updateBookmarkItems(event.items)
+                    }
 
-    private fun modifyItemAtTodoTab(
-        item: BookmarkModel
-    ) {
-        (activity as? MainActivity)?.modifyTodoItem(item)
+                    else -> Unit
+                }
+            }
+        }
     }
 
     override fun onDestroyView() {
