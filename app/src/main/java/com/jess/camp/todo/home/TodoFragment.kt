@@ -10,7 +10,7 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import com.jess.camp.databinding.TodoFragmentBinding
-import com.jess.camp.main.MainSharedEvent
+import com.jess.camp.main.MainSharedEventForTodo
 import com.jess.camp.main.MainSharedViewModel
 import com.jess.camp.todo.content.TodoContentActivity
 import com.jess.camp.todo.content.TodoContentType
@@ -108,13 +108,11 @@ class TodoFragment : Fragment() {
         }
 
         with(sharedViewModel) {
-            event.observe(viewLifecycleOwner) { event ->
+            todoEvent.observe(viewLifecycleOwner) { event ->
                 when (event) {
-                    is MainSharedEvent.UpdateTodoItem -> {
+                    is MainSharedEventForTodo.UpdateTodoItem -> {
                         viewModel.modifyTodoItem(event.item)
                     }
-
-                    else -> Unit
                 }
             }
         }

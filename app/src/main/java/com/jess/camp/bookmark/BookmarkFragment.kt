@@ -8,7 +8,7 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import com.jess.camp.databinding.BookmarkFragmentBinding
-import com.jess.camp.main.MainSharedEvent
+import com.jess.camp.main.MainSharedEventForBookmark
 import com.jess.camp.main.MainSharedViewModel
 
 class BookmarkFragment : Fragment() {
@@ -57,9 +57,9 @@ class BookmarkFragment : Fragment() {
         }
 
         with(sharedViewModel) {
-            event.observe(viewLifecycleOwner) { event ->
+            bookmarkEvent.observe(viewLifecycleOwner) { event ->
                 when (event) {
-                    is MainSharedEvent.UpdateBookmarkItems -> {
+                    is MainSharedEventForBookmark.UpdateBookmarkItems -> {
                         viewModel.updateBookmarkItems(event.items)
                     }
 
