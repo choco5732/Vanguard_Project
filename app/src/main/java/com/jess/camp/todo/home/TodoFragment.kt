@@ -22,9 +22,15 @@ class TodoFragment : Fragment() {
     private var _binding: TodoFragmentBinding? = null
     private val binding get() = _binding!!
 
-    // AAC 뷰모델은 아래와 같이 선언해야 한다. (뷰모델 프로바이더)
+
+    // AAC뷰모델은 아래와 같이 선언하면 안된다!
+//    fun test() {
+//        val viewModel = TodoViewModel()
+//    }
+
+    // AAC 뷰모델은 아래와 같이 선언해야 한다. 이유를 묻는다면 룰이라 어떻게 설명할 수가 없다고 한다.
     private val viewModel: TodoViewModel by lazy {
-        ViewModelProvider(this).get(TodoViewModel::class.java) // owner는
+        ViewModelProvider(this)[TodoViewModel::class.java]
     }
 
     private val editTodoLauncher =
@@ -87,12 +93,17 @@ class TodoFragment : Fragment() {
     // ViewModel을 통한 데이터 처리
     // Owner : Fragment -> viewLifecycleOwner
     // Owner : Activity -> this
-    // observe : onStart, onResume에서만 살펴본다 즉 화면이 죽은상태에서는 안봄
+    // observe : onStart, onResume에서만 observing이 활성화된다. 즉 화면이 죽은상태에서는 살펴보지 않는다.
     private fun initModel() = with(viewModel) {
-        list.observe(viewLifecycleOwner){
+        list.observe(viewLifecycleOwner){ // TodoViewModel에서 만든 읽기전용 list를 가져온다.
             listAdapter.submitList(it)
         }
     }
+
+    // 액티비티 레벨에서 사용하고 싶을 땐 viewLifeCycleOwner대신 this를 사용하면 된다.
+    // list.obesrve(this) {
+    //
+    // }
 
     fun setTodoContent(todoModel: TodoModel?) {
 //        listAdapter.addItem(todoModel)

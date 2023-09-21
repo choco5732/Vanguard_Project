@@ -20,6 +20,7 @@ class BookmarkFragment : Fragment() {
         BookmarkListAdapter()
     }
 
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -42,6 +43,11 @@ class BookmarkFragment : Fragment() {
                     "Bookmark Title $i"
                 )
             )
+        }
+
+        val list = ArrayList<String>()
+        for ( i in 0 ..  list.size) {
+
         }
 
         listAdapter.addItems(testList)

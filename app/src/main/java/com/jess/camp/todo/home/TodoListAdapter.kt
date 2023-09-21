@@ -64,9 +64,7 @@ class TodoListAdapter(
 
 //    fun addItems(items: List<TodoModel>) {
 //
-//        submitList(items)
-//        list.addAll(items)
-//        notifyDataSetChanged()
+//        submitList(items) // 새로운걸 넣는 거니까 리스트를 새로 만들지않고 그냥 써도 됨.
 //    }
 
 //    fun addItem(todoModel: TodoModel?) {
@@ -95,8 +93,8 @@ class TodoListAdapter(
 //        list[position] = todoModel
 //        submitList(list)
 
-//        list[position] = todoModel
-//        notifyItemChanged(position)
+////        list[position] = todoModel
+////        notifyItemChanged(position)
 //    }
 
 //    fun removeItem(
@@ -109,8 +107,8 @@ class TodoListAdapter(
 //        val list = currentList.toMutableList()
 //        list.removeAt(position)
 //        submitList(list)
-//        list.removeAt(position)
-//        notifyItemRemoved(position)
+////        list.removeAt(position)
+////        notifyItemRemoved(position)
 //    }
 
 //    override fun getItemCount(): Int {
