@@ -1,6 +1,9 @@
 <resources>
-    <string name="app_name">Camp</string>
 
+    <string name="app_name">Camp</string>
+    <string name="kakao_rest_api_key">6489d07b286e32d75d8ac3a6fb8083bb</string>
+
+    <string name="main_tab_search_title">Search</string>
     <string name="main_tab_todo_title">Todo</string>
     <string name="main_tab_bookmark_title">Bookmark</string>
     <string name="main_fab_todo_add_content_description">할일 추가 버튼</string>

@@ -5,22 +5,18 @@ import androidx.fragment.app.FragmentActivity
 import androidx.viewpager2.adapter.FragmentStateAdapter
 import com.jess.camp.R
 import com.jess.camp.presentation.bookmark.BookmarkFragment
+import com.jess.camp.presentation.search.SearchFragment
 import com.jess.camp.presentation.todo.home.TodoFragment
 
 class MainViewPagerAdapter(
     fragmentActivity: FragmentActivity
 ) : FragmentStateAdapter(fragmentActivity) {
 
-    private val fragments = ArrayList<MainTabs>()
-
-    init {
-        fragments.add(
-            MainTabs(TodoFragment.newInstance(), R.string.main_tab_todo_title)
-        )
-        fragments.add(
-            MainTabs(BookmarkFragment.newInstance(), R.string.main_tab_bookmark_title),
-        )
-    }
+    private val fragments = listOf(
+        MainTabs(SearchFragment.newInstance(), R.string.main_tab_search_title),
+        MainTabs(TodoFragment.newInstance(), R.string.main_tab_todo_title),
+        MainTabs(BookmarkFragment.newInstance(), R.string.main_tab_bookmark_title),
+    )
 
     fun getFragment(position: Int): Fragment {
         return fragments[position].fragment
