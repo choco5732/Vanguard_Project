@@ -1,4 +1,4 @@
-package com.jess.camp.todo.home
+package com.jess.camp.presentation.todo.home
 
 import android.app.Activity
 import android.os.Build
@@ -10,10 +10,10 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import com.jess.camp.databinding.TodoFragmentBinding
-import com.jess.camp.main.MainSharedEventForTodo
-import com.jess.camp.main.MainSharedViewModel
-import com.jess.camp.todo.content.TodoContentActivity
-import com.jess.camp.todo.content.TodoContentType
+import com.jess.camp.presentation.main.MainSharedEventForTodo
+import com.jess.camp.presentation.main.MainSharedViewModel
+import com.jess.camp.presentation.todo.content.TodoContentActivity
+import com.jess.camp.presentation.todo.content.TodoContentType
 
 class TodoFragment : Fragment() {
 

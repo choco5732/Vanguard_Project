@@ -1,4 +1,4 @@
-package com.jess.camp.main
+package com.jess.camp.presentation.main
 
 import android.app.Activity
 import android.os.Build
@@ -9,9 +9,9 @@ import androidx.viewpager2.widget.ViewPager2
 import com.google.android.material.tabs.TabLayoutMediator
 import com.jess.camp.R
 import com.jess.camp.databinding.MainActivityBinding
-import com.jess.camp.todo.content.TodoContentActivity
-import com.jess.camp.todo.home.TodoFragment
-import com.jess.camp.todo.home.TodoModel
+import com.jess.camp.presentation.todo.content.TodoContentActivity
+import com.jess.camp.presentation.todo.home.TodoFragment
+import com.jess.camp.presentation.todo.home.TodoModel
 
 class MainActivity : AppCompatActivity() {
 

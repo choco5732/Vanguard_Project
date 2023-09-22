@@ -1,4 +1,4 @@
-package com.jess.camp.bookmark
+package com.jess.camp.presentation.bookmark
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -8,8 +8,8 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import com.jess.camp.databinding.BookmarkFragmentBinding
-import com.jess.camp.main.MainSharedEventForBookmark
-import com.jess.camp.main.MainSharedViewModel
+import com.jess.camp.presentation.main.MainSharedEventForBookmark
+import com.jess.camp.presentation.main.MainSharedViewModel
 
 class BookmarkFragment : Fragment() {
 

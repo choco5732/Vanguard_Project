@@ -1,11 +1,11 @@
-package com.jess.camp.main
+package com.jess.camp.presentation.main
 
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
 import androidx.viewpager2.adapter.FragmentStateAdapter
 import com.jess.camp.R
-import com.jess.camp.bookmark.BookmarkFragment
-import com.jess.camp.todo.home.TodoFragment
+import com.jess.camp.presentation.bookmark.BookmarkFragment
+import com.jess.camp.presentation.todo.home.TodoFragment
 
 class MainViewPagerAdapter(
     fragmentActivity: FragmentActivity
