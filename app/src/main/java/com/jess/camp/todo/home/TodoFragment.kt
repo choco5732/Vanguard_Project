@@ -8,9 +8,11 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.viewModels
 import androidx.lifecycle.ViewModelProvider
 import com.jess.camp.databinding.TodoFragmentBinding
 import com.jess.camp.main.MainActivity
+import com.jess.camp.main.MainSharedViewModel
 import com.jess.camp.todo.content.TodoContentActivity
 import com.jess.camp.todo.content.TodoContentType
 
@@ -23,9 +25,16 @@ class TodoFragment : Fragment() {
     private var _binding: TodoFragmentBinding? = null
     private val binding get() = _binding!!
 
+    // 파라메터가 있는 뷰모델을 생성하는 방법 1 : 구글에서 만든 맨땅에 헤딩하는 방식
     private val viewModel: TodoViewModel by lazy {
-        ViewModelProvider(this)[TodoViewModel::class.java]
+        ViewModelProvider(this, TodoViewModelFactory())[TodoViewModel::class.java] // 뷰모델에서 안드로이드 context접근 하는 법을 찾아오면 알려주신다고 함
     }
+    // 파라메터가 있는 뷰모델을 생성하는 방법 2 : viewModels라는 아주 편한 방식
+    private val viewModel2: TodoViewModel by viewModels{
+        TodoViewModelFactory()
+    }
+
+    private val sharedViewModel: MainSharedViewModel by viewModels()
 
     private val editTodoLauncher =
         registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
@@ -96,6 +105,7 @@ class TodoFragment : Fragment() {
     private fun initViewModel() = with(viewModel) {
         list.observe(viewLifecycleOwner) {
             listAdapter.submitList(it)
+            sharedViewModel.updateTodoItems(it)
         }
     }
 

@@ -5,9 +5,11 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.viewModels
 import androidx.lifecycle.ViewModelProvider
 import com.jess.camp.databinding.BookmarkFragmentBinding
 import com.jess.camp.main.MainActivity
+import com.jess.camp.main.MainSharedViewModel
 
 class BookmarkFragment : Fragment() {
 
@@ -21,6 +23,8 @@ class BookmarkFragment : Fragment() {
     private val viewModel: BookmarkViewModel by lazy {
         ViewModelProvider(this)[BookmarkViewModel::class.java]
     }
+
+    private val sharedViewModel: MainSharedViewModel by viewModels()
 
     private val listAdapter by lazy {
         BookmarkListAdapter { position, item ->

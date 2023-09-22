@@ -3,15 +3,24 @@ package com.jess.camp.todo.home
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.ViewModelProvider
 import java.util.concurrent.atomic.AtomicLong
 
-class TodoViewModel : ViewModel() {
+
+// 아래와 같이 생성해선 안된다. 뷰모델 팩토리를 이용해야 함.
+// 뷰모델 팩토리는 보통 뷰모델 안에 만드는 경우가 많다.
+//fun test() {
+//    val viewModel = TodoViewModel(AtomicLong(1L))
+//}
+class TodoViewModel(
+    private val idGenerate: AtomicLong
+) : ViewModel() {
 
     private val _list: MutableLiveData<List<TodoModel>> = MutableLiveData()
     val list: LiveData<List<TodoModel>> get() = _list
 
     // id 를 부여할 값
-    private val idGenerate = AtomicLong(1L)
+//    private val idGenerate = AtomicLong(1L)
 
     init {
         _list.value = arrayListOf<TodoModel>().apply {
@@ -88,3 +97,7 @@ class TodoViewModel : ViewModel() {
         _list.value = currentList
     }
 }
+
+//class TodoViewModelFactory : ViewModelProvider.Factory {
+//
+//}
