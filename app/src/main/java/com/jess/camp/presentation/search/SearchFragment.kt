@@ -21,6 +21,10 @@ class SearchFragment : Fragment() {
         SearchViewModelFactory()
     }
 
+    private val adapter: SearchListAdapter by lazy {
+        SearchListAdapter()
+    }
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -34,15 +38,18 @@ class SearchFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         initView()
         initViewModel()
+
+        // test
+        viewModel.search("kotlin")
     }
 
     private fun initView() = with(binding) {
-        viewModel.search("kotlin")
+        searchList.adapter = adapter
     }
 
     private fun initViewModel() = with(viewModel) {
         list.observe(viewLifecycleOwner) {
-
+            adapter.submitList(it)
         }
     }
 

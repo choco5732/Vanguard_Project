@@ -24,10 +24,11 @@ class SearchViewModel(
         query: String
     ) = viewModelScope.launch {
         runCatching {
-            createItems(
+            val items = createItems(
                 images = searchImage(query),
                 videos = searchVideo(query)
             )
+            _list.postValue(items)
         }.onFailure {
             // network, error, ...
             Log.e("jess", it.message.toString())
