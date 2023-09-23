@@ -40,8 +40,10 @@ class SearchFragment : Fragment() {
         viewModel.search("kotlin")
     }
 
-    private fun initViewModel() {
+    private fun initViewModel() = with(viewModel) {
+        list.observe(viewLifecycleOwner) {
 
+        }
     }
 
     override fun onDestroyView() {
