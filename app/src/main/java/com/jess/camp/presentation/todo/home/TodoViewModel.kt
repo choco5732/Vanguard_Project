@@ -33,7 +33,9 @@ class TodoViewModel(
         _list.value = repository.modifyTodoItem(item)
     }
 
-    fun removeTodoItem(position: Int?) {
+    fun removeTodoItem(
+        position: Int?
+    ) {
         _list.value = repository.removeTodoItem(position)
     }
 }
