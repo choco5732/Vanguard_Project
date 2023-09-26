@@ -36,7 +36,7 @@ class MainActivity : AppCompatActivity() {
                     )
                 }
 
-                val todoFragment = viewPagerAdapter.getFragment(0) as? TodoFragment
+                val todoFragment = viewPagerAdapter.getFragment(1) as? TodoFragment
                 todoFragment?.setDodoContent(todoModel)
             }
         }
