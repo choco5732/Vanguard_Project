@@ -64,12 +64,9 @@ class TodoFragment : Fragment() {
     private val listAdapter by lazy {
         TodoListAdapter(
             onClickItem = { position, item ->
-                editTodoLauncher.launch(
-                    TodoContentActivity.newIntentForEdit(
-                        requireContext(),
-                        position,
-                        item
-                    )
+                viewModel.onClickItemForEdit(
+                    position,
+                    item
                 )
             },
             onBookmarkChecked = { _, item ->
@@ -104,6 +101,18 @@ class TodoFragment : Fragment() {
             list.observe(viewLifecycleOwner) {
                 listAdapter.submitList(it)
                 sharedViewModel.updateBookmarkItems(it)
+            }
+
+            event.observe(viewLifecycleOwner) { event ->
+                when (event) {
+                    is TodoEvent.OpenContent -> editTodoLauncher.launch(
+                        TodoContentActivity.newIntentForEdit(
+                            requireContext(),
+                            event.position,
+                            event.item
+                        )
+                    )
+                }
             }
         }
 

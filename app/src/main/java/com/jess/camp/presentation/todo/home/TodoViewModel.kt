@@ -5,6 +5,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import com.jess.camp.data.repository.TodoRepositoryImpl
+import com.jess.camp.util.SingleLiveEvent
 import java.util.concurrent.atomic.AtomicLong
 
 class TodoViewModel(
@@ -13,6 +14,9 @@ class TodoViewModel(
 
     private val _list: MutableLiveData<List<TodoModel>> = MutableLiveData()
     val list: LiveData<List<TodoModel>> get() = _list
+
+    private val _event: SingleLiveEvent<TodoEvent> = SingleLiveEvent()
+    val event: LiveData<TodoEvent> get() = _event
 
     init {
         _list.value = repository.getTestData()
@@ -37,6 +41,13 @@ class TodoViewModel(
         position: Int?
     ) {
         _list.value = repository.removeTodoItem(position)
+    }
+
+    fun onClickItemForEdit(
+        position: Int,
+        item: TodoModel
+    ) {
+        _event.value = TodoEvent.OpenContent(position, item)
     }
 }
 

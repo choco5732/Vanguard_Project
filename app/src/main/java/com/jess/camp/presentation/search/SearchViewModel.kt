@@ -1,8 +1,6 @@
 package com.jess.camp.presentation.search
 
 import android.util.Log
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.jess.camp.domain.model.ImageDocumentEntity
@@ -10,8 +8,12 @@ import com.jess.camp.domain.model.SearchEntity
 import com.jess.camp.domain.model.VideoDocumentEntity
 import com.jess.camp.domain.usecase.GetSearchImageUseCase
 import com.jess.camp.domain.usecase.GetSearchVideoUseCase
+import kotlinx.coroutines.channels.BufferOverflow
+import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
@@ -23,6 +25,12 @@ class SearchViewModel(
 
     private val _uiState = MutableStateFlow(SearchUiState.initialize())
     val uiState: StateFlow<SearchUiState> = _uiState.asStateFlow()
+
+    private val _event = MutableSharedFlow<SearchEvent>(
+        extraBufferCapacity = 10,
+        onBufferOverflow = BufferOverflow.DROP_LATEST
+    )
+    val event: SharedFlow<SearchEvent> = _event.asSharedFlow()
 
     fun search(
         query: String
@@ -81,5 +89,11 @@ class SearchViewModel(
         }
 
         return items
+    }
+
+    fun onClickSearchItem(
+        item: SearchItem
+    ) {
+        _event.tryEmit(SearchEvent.OpenDetail(item))
     }
 }

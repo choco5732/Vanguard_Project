@@ -12,6 +12,7 @@ import com.jess.camp.databinding.SearchUnknownItemBinding
 import com.jess.camp.databinding.SearchVideoItemBinding
 
 class SearchListAdapter(
+    private val onClick: (SearchItem) -> Unit
 ) : ListAdapter<SearchItem, SearchListAdapter.ViewHolder>(
 
     object : DiffUtil.ItemCallback<SearchItem>() {
@@ -57,7 +58,8 @@ class SearchListAdapter(
                         LayoutInflater.from(parent.context),
                         parent,
                         false
-                    )
+                    ),
+                    onClick
                 )
 
             SearchItemViewType.VIDEO.ordinal ->
@@ -66,7 +68,8 @@ class SearchListAdapter(
                         LayoutInflater.from(parent.context),
                         parent,
                         false
-                    )
+                    ),
+                    onClick
                 )
 
             else -> UnknownViewHolder(
@@ -83,25 +86,35 @@ class SearchListAdapter(
     }
 
     class ImageViewHolder(
-        private val binding: SearchImageItemBinding
+        private val binding: SearchImageItemBinding,
+        private val onClick: (SearchItem) -> Unit
     ) : ViewHolder(binding.root) {
 
         override fun onBind(item: SearchItem) = with(binding) {
             if (item is SearchItem.ImageItem) {
                 title.text = item.title
                 thumbnail.load(item.thumbnail)
+
+                container.setOnClickListener {
+                    onClick(item)
+                }
             }
         }
     }
 
     class VideoViewHolder(
-        private val binding: SearchVideoItemBinding
+        private val binding: SearchVideoItemBinding,
+        private val onClick: (SearchItem) -> Unit
     ) : ViewHolder(binding.root) {
 
         override fun onBind(item: SearchItem) = with(binding) {
             if (item is SearchItem.VideoItem) {
                 title.text = item.title
                 thumbnail.load(item.thumbnail)
+
+                container.setOnClickListener {
+                    onClick(item)
+                }
             }
         }
     }

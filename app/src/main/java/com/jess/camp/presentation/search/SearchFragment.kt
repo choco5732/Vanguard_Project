@@ -1,6 +1,7 @@
 package com.jess.camp.presentation.search
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -26,7 +27,9 @@ class SearchFragment : Fragment() {
     }
 
     private val adapter: SearchListAdapter by lazy {
-        SearchListAdapter()
+        SearchListAdapter { item ->
+            viewModel.onClickSearchItem(item)
+        }
     }
 
     override fun onCreateView(
@@ -56,17 +59,35 @@ class SearchFragment : Fragment() {
         // collectLatest : 새로운 데이터가 발행되면 이전 처리르 취소하고 새로운 데이터 처리
         viewLifecycleOwner.lifecycleScope.launch {
             uiState.flowWithLifecycle(viewLifecycleOwner.lifecycle)
-                .collectLatest {
-                    onBindState(it)
+                .collectLatest { state ->
+                    onBind(state)
+                }
+        }
+
+        viewLifecycleOwner.lifecycleScope.launch {
+            event.flowWithLifecycle(viewLifecycleOwner.lifecycle)
+                .collectLatest { event ->
+                    onEvent(event)
                 }
         }
     }
 
-    private fun onBindState(
+    private fun onBind(
         uiState: SearchUiState
     ) = with(binding) {
         adapter.submitList(uiState.list)
     }
+
+    private fun onEvent(
+        event: SearchEvent
+    ) {
+        when (event) {
+            is SearchEvent.OpenDetail -> {
+                Log.d("jess", event.item.toString())
+            }
+        }
+    }
+
 
     override fun onDestroyView() {
         _binding = null
