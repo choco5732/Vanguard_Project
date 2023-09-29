@@ -6,7 +6,11 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.flowWithLifecycle
+import androidx.lifecycle.lifecycleScope
 import com.jess.camp.databinding.SearchFragmentBinding
+import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.launch
 
 class SearchFragment : Fragment() {
 
@@ -48,9 +52,20 @@ class SearchFragment : Fragment() {
     }
 
     private fun initViewModel() = with(viewModel) {
-        list.observe(viewLifecycleOwner) {
-            adapter.submitList(it)
+        // collect : 새로운 데이터가 발행 되면 끝날 때 까지 기다림
+        // collectLatest : 새로운 데이터가 발행되면 이전 처리르 취소하고 새로운 데이터 처리
+        viewLifecycleOwner.lifecycleScope.launch {
+            uiState.flowWithLifecycle(viewLifecycleOwner.lifecycle)
+                .collectLatest {
+                    onBindState(it)
+                }
         }
+    }
+
+    private fun onBindState(
+        uiState: SearchUiState
+    ) = with(binding) {
+        adapter.submitList(uiState.list)
     }
 
     override fun onDestroyView() {

@@ -10,6 +10,10 @@ import com.jess.camp.domain.model.SearchEntity
 import com.jess.camp.domain.model.VideoDocumentEntity
 import com.jess.camp.domain.usecase.GetSearchImageUseCase
 import com.jess.camp.domain.usecase.GetSearchVideoUseCase
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
 class SearchViewModel(
@@ -17,8 +21,8 @@ class SearchViewModel(
     private val searchVideo: GetSearchVideoUseCase
 ) : ViewModel() {
 
-    private val _list: MutableLiveData<List<SearchItem>> = MutableLiveData()
-    val list: LiveData<List<SearchItem>> get() = _list
+    private val _uiState = MutableStateFlow(SearchUiState.initialize())
+    val uiState: StateFlow<SearchUiState> = _uiState.asStateFlow()
 
     fun search(
         query: String
@@ -28,7 +32,12 @@ class SearchViewModel(
                 images = searchImage(query),
                 videos = searchVideo(query)
             )
-            _list.postValue(items)
+
+            _uiState.update { prevState ->
+                prevState.copy(
+                    list = items
+                )
+            }
         }.onFailure {
             // network, error, ...
             Log.e("jess", it.message.toString())
