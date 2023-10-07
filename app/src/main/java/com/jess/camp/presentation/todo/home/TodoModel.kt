@@ -1,7 +1,7 @@
-package com.jess.camp.todo.home
+package com.jess.camp.presentation.todo.home
 
 import android.os.Parcelable
-import com.jess.camp.bookmark.BookmarkModel
+import com.jess.camp.presentation.bookmark.BookmarkModel
 import kotlinx.parcelize.Parcelize
 
 @Parcelize

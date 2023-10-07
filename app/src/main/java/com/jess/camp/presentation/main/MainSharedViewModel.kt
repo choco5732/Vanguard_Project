@@ -1,12 +1,12 @@
-package com.jess.camp.main
+package com.jess.camp.presentation.main
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.jess.camp.bookmark.BookmarkModel
-import com.jess.camp.bookmark.toTodoModel
-import com.jess.camp.todo.home.TodoModel
-import com.jess.camp.todo.home.toBookmarkModel
+import com.jess.camp.presentation.bookmark.BookmarkModel
+import com.jess.camp.presentation.bookmark.toTodoModel
+import com.jess.camp.presentation.todo.home.TodoModel
+import com.jess.camp.presentation.todo.home.toBookmarkModel
 
 class MainSharedViewModel : ViewModel() {
 

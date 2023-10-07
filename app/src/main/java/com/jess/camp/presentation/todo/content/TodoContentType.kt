@@ -1,4 +1,4 @@
-package com.jess.camp.todo.content
+package com.jess.camp.presentation.todo.content
 
 enum class TodoContentType {
     ADD, EDIT, REMOVE;

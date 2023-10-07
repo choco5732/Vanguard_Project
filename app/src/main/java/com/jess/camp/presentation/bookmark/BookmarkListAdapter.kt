@@ -1,28 +1,27 @@
-package com.jess.camp.todo.home
+package com.jess.camp.presentation.bookmark
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
-import com.jess.camp.databinding.TodoItemBinding
+import com.jess.camp.databinding.BookmarkItemBinding
 
-class TodoListAdapter(
-    private val onClickItem: (Int, TodoModel) -> Unit,
-    private val onBookmarkChecked: (Int, TodoModel) -> Unit
-) : ListAdapter<TodoModel, TodoListAdapter.ViewHolder>(
+class BookmarkListAdapter(
+    private val onBookmarkChecked: (Int, BookmarkModel) -> Unit
+) : ListAdapter<BookmarkModel, BookmarkListAdapter.ViewHolder>(
 
-    object : DiffUtil.ItemCallback<TodoModel>() {
+    object : DiffUtil.ItemCallback<BookmarkModel>() {
         override fun areItemsTheSame(
-            oldItem: TodoModel,
-            newItem: TodoModel
+            oldItem: BookmarkModel,
+            newItem: BookmarkModel
         ): Boolean {
             return oldItem.id == newItem.id
         }
 
         override fun areContentsTheSame(
-            oldItem: TodoModel,
-            newItem: TodoModel
+            oldItem: BookmarkModel,
+            newItem: BookmarkModel
         ): Boolean {
             return oldItem == newItem
         }
@@ -31,8 +30,7 @@ class TodoListAdapter(
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         return ViewHolder(
-            TodoItemBinding.inflate(LayoutInflater.from(parent.context), parent, false),
-            onClickItem,
+            BookmarkItemBinding.inflate(LayoutInflater.from(parent.context), parent, false),
             onBookmarkChecked
         )
     }
@@ -43,26 +41,18 @@ class TodoListAdapter(
     }
 
     class ViewHolder(
-        private val binding: TodoItemBinding,
-        private val onClickItem: (Int, TodoModel) -> Unit,
-        private val onBookmarkChecked: (Int, TodoModel) -> Unit
+        private val binding: BookmarkItemBinding,
+        private val onBookmarkChecked: (Int, BookmarkModel) -> Unit
     ) : RecyclerView.ViewHolder(binding.root) {
 
-        fun bind(item: TodoModel) = with(binding) {
+        fun bind(item: BookmarkModel) = with(binding) {
             title.text = item.title
             description.text = item.description
             bookmark.isChecked = item.isBookmark
 
-            // 아이템 클릭
-            container.setOnClickListener {
-                onClickItem(
-                    adapterPosition,
-                    item
-                )
-            }
-
             // 북마크 클릭
             bookmark.setOnClickListener {
+                // 현재 바인딩된 아이템과 checked 된 값 비교 후 전달
                 if (item.isBookmark != bookmark.isChecked) {
                     onBookmarkChecked(
                         adapterPosition,

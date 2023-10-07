@@ -1,4 +1,4 @@
-package com.jess.camp.todo.content
+package com.jess.camp.presentation.todo.content
 
 import android.app.Activity
 import android.content.Context
@@ -10,7 +10,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.isVisible
 import com.jess.camp.R
 import com.jess.camp.databinding.TodoAddActivityBinding
-import com.jess.camp.todo.home.TodoModel
+import com.jess.camp.presentation.todo.home.TodoModel
 
 
 class TodoContentActivity : AppCompatActivity() {
