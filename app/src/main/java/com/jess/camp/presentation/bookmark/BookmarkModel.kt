@@ -1,6 +1,6 @@
-package com.jess.camp.bookmark
+package com.jess.camp.presentation.bookmark
 
-import com.jess.camp.todo.home.TodoModel
+import com.jess.camp.presentation.todo.home.TodoModel
 
 data class BookmarkModel(
     val id: Long,

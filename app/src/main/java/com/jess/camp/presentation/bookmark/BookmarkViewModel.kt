@@ -1,4 +1,4 @@
-package com.jess.camp.bookmark
+package com.jess.camp.presentation.bookmark
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
