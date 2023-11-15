@@ -37,6 +37,8 @@ class SearchFragment : Fragment() {
 
         initView()
         initModel()
+
+        viewModel.search("kotlin")
     }
 
     private fun initView() = with(binding) {
@@ -44,9 +46,9 @@ class SearchFragment : Fragment() {
     }
 
     private fun initModel() = with(viewModel) {
-        list.observe(viewLifecycleOwner){
-            adapter.submitlist(it)
-        }
+//        list.observe(viewLifecycleOwner){
+//            adapter.submitlist(it)
+//        }
     }
 
     override fun onDestroy() {

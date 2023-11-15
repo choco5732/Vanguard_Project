@@ -31,7 +31,7 @@ object RetrofitClient {
         .setDateFormat("YYYY-MM-DD'T'hh:mm:ss")
         .create()
 
-    private val search: SearchRemoteDatasource by lazy {
+    val search: SearchRemoteDatasource by lazy {
         retrofit.create(SearchRemoteDatasource::class.java)
     }
 }

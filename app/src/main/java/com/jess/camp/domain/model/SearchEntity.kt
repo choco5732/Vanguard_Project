@@ -15,7 +15,7 @@ data class MetaEntity(
 )
 
 data class ImageDocumentEntity(
-    @SerializedName("collection") val news: String?,
+    @SerializedName("collection") val collection: String?,
     @SerializedName("thumbnail_url") val thumbnailUrl: String?,
     @SerializedName("image_url") val imageUrl: String?,
     @SerializedName("width") val width: Int?,

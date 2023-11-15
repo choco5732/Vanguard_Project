@@ -12,19 +12,12 @@ class MainViewPagerAdapter(
     fragmentActivity: FragmentActivity
 ) : FragmentStateAdapter(fragmentActivity) {
 
-    private val fragments = ArrayList<MainTabs>()
+    private val fragments = listOf<MainTabs>(
+        MainTabs(TodoFragment.newInstance(), R.string.main_tab_todo_title),
+        MainTabs(BookmarkFragment.newInstance(), R.string.main_tab_bookmark_title),
+        MainTabs(SearchFragment.newInstance(), R.string.main_tab_search_title)
+    )
 
-    init {
-        fragments.add(
-            MainTabs(TodoFragment.newInstance(), R.string.main_tab_todo_title)
-        )
-        fragments.add(
-            MainTabs(BookmarkFragment.newInstance(), R.string.main_tab_bookmark_title),
-        )
-        fragments.add(
-            MainTabs(SearchFragment.newInstance(), R.string.main_tab_search_title)
-        )
-    }
 
     fun getFragment(position: Int): Fragment {
         return fragments[position].fragment
